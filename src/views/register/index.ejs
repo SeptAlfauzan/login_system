@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="/assets/css/output.css">
+</head>
+
+<body>
+    <div class="w-full flex justify-center min-h-screen items-center">
+        <form method="post" action="/register" id="register-form"
+            class="md:w-1/3 w-5/6 flex items-center flex-col gap-3 border border-slate-500 rounded-lg py-10">
+            <!-- alert notif -->
+            <div class="bg-slate-300 invisible transition-all duration-100 py-4 w-3/5 rounded flex justify-between px-3"
+                id="alert-container">
+                <p id="alert"></p>
+            </div>
+            <h1 class="text-2xl w-3/5">Please fill your data</h1>
+            <div class="w-3/5 flex flex-col justify-between">
+                <label>Nama</label>
+                <input name="name" type="text" class="border border-slate-500 rounded-lg px-4 py-2">
+            </div>
+            <div class="w-3/5 flex flex-col justify-between">
+                <label>NIM</label>
+                <input name="nim" type="number" class="border border-slate-500 rounded-lg px-4 py-2">
+            </div>
+            <div class="w-3/5 flex flex-col justify-between">
+                <label>Password</label>
+                <input name="password" id="password-input" type="password"
+                    class="border border-slate-500 rounded-lg px-4 py-2">
+            </div>
+            <div class="w-3/5 flex justify-between">
+                <a href="/" class="bg-transparent px-4 py-2 rounded-lg hover:border-slate-500 border duration-150 ">Back
+                    to
+                    login
+                </a>
+                <button type="submit"
+                    class="bg-blue-300 px-4 py-2 rounded-lg hover:bg-blue-500 hover:text-white duration-150 ">Register</button>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    const registerForm = document.querySelector('#register-form');
+    const alertContent = document.querySelector('#alert');
+    const alertContainer = document.querySelector('#alert-container');
+
+    const showAlert = (message) => {
+        alertContent.innerHTML = message;
+        alertContainer.classList.remove('invisible');
+    }
+
+
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const url = 'http://localhost:8000/register';
+        const [name, nim, password] = e.target.querySelectorAll('input');
+        const data = { name: name.value, nim: nim.value, password: password.value }
+        const response = await fetch(url, {
+            method: 'post',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify(data)
+        })
+        const { message } = await response.json();
+        showAlert(message);
+    })
+</script>
+
+</html>
