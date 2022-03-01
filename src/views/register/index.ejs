@@ -20,17 +20,14 @@
             </div>
             <h1 class="text-2xl w-3/5">Please fill your data</h1>
             <div class="w-3/5 flex flex-col justify-between">
-                <label>Nama</label>
-                <input name="name" type="text" class="border border-slate-500 rounded-lg px-4 py-2">
-            </div>
-            <div class="w-3/5 flex flex-col justify-between">
-                <label>NIM</label>
-                <input name="nim" type="number" class="border border-slate-500 rounded-lg px-4 py-2">
+                <label>Username</label>
+                <input placeholder="type your name as username" name="username" type="text"
+                    class="border border-slate-500 rounded-lg px-4 py-2">
             </div>
             <div class="w-3/5 flex flex-col justify-between">
                 <label>Password</label>
-                <input name="password" id="password-input" type="password"
-                    class="border border-slate-500 rounded-lg px-4 py-2">
+                <input name="password" placeholder="suggest to use your NIM as password" id="password-input"
+                    type="password" class="border border-slate-500 rounded-lg px-4 py-2">
             </div>
             <div class="w-3/5 flex justify-between">
                 <a href="/" class="bg-transparent px-4 py-2 rounded-lg hover:border-slate-500 border duration-150 ">Back
@@ -57,8 +54,8 @@
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const url = 'http://localhost:8000/register';
-        const [name, nim, password] = e.target.querySelectorAll('input');
-        const data = { name: name.value, nim: nim.value, password: password.value }
+        const [username, password] = e.target.querySelectorAll('input');
+        const data = { username: username.value, password: password.value }
         const response = await fetch(url, {
             method: 'post',
             mode: 'cors',

@@ -8,17 +8,16 @@ class AuthController {
   };
   static login = async (req: Request, res: Response) => {
     try {
-      const { nim, password } = req.body;
+      const { username, password } = req.body;
 
-      const record = await Mahasiswa.findOne({ where: { nim } });
+      const record = await Mahasiswa.findOne({ where: { username } });
       if (!record)
-        return res.status(404).json({ message: "NIM not registered! 🤚" });
+        return res.status(404).json({ message: "Username not registered! 🤚" });
       const compare = bcrypt.compareSync(password, record.password);
       if (!compare)
         return res.status(404).json({ message: "Password doesn't match! 🤚" });
       // create session
-
-      (req.session as any).userId = record.nama;
+      (req.session as any).userId = record.username;
       const sessionData = (req.session as any).userId;
       console.log("s", sessionData);
       return res.json({ message: "redirect", url: "/dashboard" });

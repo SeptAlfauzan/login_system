@@ -20,8 +20,8 @@
             </div>
             <h1 class="text-2xl w-3/5">Please login first</h1>
             <div class="w-3/5 flex flex-col justify-between">
-                <label>NIM</label>
-                <input name="nim" type="number" class="border border-slate-500 rounded-lg px-4 py-2">
+                <label>Username</label>
+                <input name="username" type="text" class="border border-slate-500 rounded-lg px-4 py-2">
             </div>
             <div class="w-3/5 flex flex-col justify-between">
                 <label>Password</label>
@@ -53,8 +53,8 @@
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const endpoint = 'http://localhost:8000/auth';
-        const [nim, password] = e.target.querySelectorAll('input');
-        const data = { nim: nim.value, password: password.value }
+        const [username, password] = e.target.querySelectorAll('input');
+        const data = { username: username.value, password: password.value }
         const response = await fetch(endpoint, {
             method: 'post',
             mode: 'cors',

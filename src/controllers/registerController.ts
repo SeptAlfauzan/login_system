@@ -9,20 +9,18 @@ class RegisterController {
 
   static register = async (req: Request, res: Response) => {
     try {
-      const { name, nim, password } = req.body;
+      const { username, password } = req.body;
       const saltRound = 10;
       const hashedPassword = bcrypt.hashSync(password, saltRound);
+      const data = { username, password: hashedPassword };
 
-      const data = { nama: name, nim, password: hashedPassword };
-
-      console.log(data);
       const [mahasiswa, created] = await Mahasiswa.findOrCreate({
-        where: { nim },
+        where: { username },
         defaults: data,
       });
       if (created)
         return res.status(200).json({ message: "Register success ✅" });
-      res.status(200).json({ message: "NIM already registered! 🤚" });
+      res.status(200).json({ message: "Username already registered! 🤚" });
     } catch (error) {
       console.log(error);
     }

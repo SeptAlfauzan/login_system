@@ -3,8 +3,7 @@ const Database = require("../configs/DB");
 import { Sequelize, DataTypes, Model, BuildOptions } from "sequelize";
 
 interface Mahasiswa extends Model {
-  nama: Text;
-  nim: bigint;
+  username: Text;
   password: Text;
 }
 
@@ -13,11 +12,8 @@ type MahasiswaStatic = typeof Model & {
 };
 
 const Mahasiswa = <MahasiswaStatic>DB.define("mahasiswa", {
-  nama: {
+  username: {
     type: DataTypes.TEXT,
-  },
-  nim: {
-    type: DataTypes.BIGINT,
   },
   password: {
     type: DataTypes.TEXT,
