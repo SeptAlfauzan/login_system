@@ -11,22 +11,65 @@
 
 <body>
     <div class="w-full flex justify-center min-h-screen items-center">
-        <form class="w-1/3 flex items-center flex-col gap-3 border border-slate-500 rounded-lg py-10">
+        <form method="post" action="/auth" id="login-form"
+            class="md:w-1/3 w-5/6 flex items-center flex-col gap-3 border border-slate-500 rounded-lg py-10">
+            <!-- alert notif -->
+            <div class="bg-slate-300 invisible transition-all duration-100 py-4 w-3/5 rounded flex justify-between px-3"
+                id="alert-container">
+                <p id="alert"></p>
+            </div>
             <h1 class="text-2xl w-3/5">Please login first</h1>
             <div class="w-3/5 flex flex-col justify-between">
                 <label>NIM</label>
-                <input type="number" class="border border-slate-500 rounded-lg px-4 py-2">
+                <input name="nim" type="number" class="border border-slate-500 rounded-lg px-4 py-2">
             </div>
             <div class="w-3/5 flex flex-col justify-between">
                 <label>Password</label>
-                <input id="password-input" type="password" class="border border-slate-500 rounded-lg px-4 py-2">
+                <input name="password" id="password-input" type="password"
+                    class="border border-slate-500 rounded-lg px-4 py-2">
+            </div>
+            <div class="w-3/5 flex justify-between">
+                <a href="/register"
+                    class="bg-transparent px-4 py-2 rounded-lg hover:border-slate-500 border duration-150 ">Create new
+                    account
+                </a>
+                <button type="submit"
+                    class="bg-blue-300 px-4 py-2 rounded-lg hover:bg-blue-500 hover:text-white duration-150 ">Login</button>
             </div>
         </form>
     </div>
 </body>
 <script>
-    const inputPassword = document.querySelector('#password-input');
+    const loginForm = document.querySelector('#login-form');
+    const alertContent = document.querySelector('#alert');
+    const alertContainer = document.querySelector('#alert-container');
 
+    const showAlert = (message) => {
+        alertContent.innerHTML = message;
+        alertContainer.classList.remove('invisible');
+    }
+
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const endpoint = 'http://localhost:8000/auth';
+        const [nim, password] = e.target.querySelectorAll('input');
+        const data = { nim: nim.value, password: password.value }
+        const response = await fetch(endpoint, {
+            method: 'post',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify(data)
+        })
+        const { message, url } = await response.json();
+        if (message == 'redirect') return window.location.href = url;
+        return showAlert(message);
+    })
 </script>
 
 </html>
