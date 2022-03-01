@@ -5,6 +5,8 @@ const PORT = 8000;
 import bodyParser from "body-parser";
 const RegisterRoute = require("./routers/registerRouter");
 const AuthRoute = require("./routers/authRouter");
+const MainRoute = require("./routers/mainRouter");
+const DashboardRoute = require("./routers/dashboardRouter");
 
 import session from "express-session";
 
@@ -28,16 +30,9 @@ app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "ejs");
 // app.use(express.static(__dirname + "public"));
 app.use(express.static("public"));
-
-app.get("/dashboard", (req, res) => {
-  const sessionData = (req.session as any).userId;
-  if (!sessionData) return res.redirect("/auth");
-  res.render("dashboard", { user: sessionData });
-});
-app.get("/", (req, res) => {
-  res.redirect("/auth");
-});
-
+// routes
+app.use("/", MainRoute);
+app.use("/dashboard", DashboardRoute);
 app.use("/auth", AuthRoute);
 app.use("/register", RegisterRoute);
 
